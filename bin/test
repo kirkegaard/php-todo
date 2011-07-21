@@ -1,0 +1,26 @@
+#!/usr/bin/env php
+<?php
+
+// print "./bin/todo ?\n";
+// system("./bin/todo ?");
+
+print "\n./bin/todo\n";
+system("./bin/todo");
+
+print "\n./bin/todo hello\n";
+system("./bin/todo hello");
+
+print "\n./bin/todo hello world\n";
+system("./bin/todo hello world");
+
+print "\n./bin/todo world 21\n";
+system("./bin/todo world 21");
+
+print "\n./bin/todo 21\n";
+system("./bin/todo 21");
+
+print "\n./bin/todo 1 42\n";
+system("./bin/todo 1 42");
+
+print "\n./bin/todo d 1\n";
+system("./bin/todo d 1");

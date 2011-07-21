@@ -1,0 +1,87 @@
+#!/usr/bin/env php
+<?php
+
+require 'Colors.php';
+require 'Todo.php';
+
+$todo = new Todo();
+
+$opt = getopt('ht:p::d::', array(
+    'help',
+    'todo:',
+    'priority::',
+    'delete::'
+));
+
+$argv = array_slice($argv, 1);
+
+$argument_count    = count($argv);
+$argument_first    = ($argument_count > 0) ? $argv[0] : null;
+$argument_last     = ($argument_count > 0) ? $argv[$argument_count - 1] : null;
+$argument_priority = (is_numeric($argument_last) == true) ? is_numeric($argument_last) : null;
+$argument_imploded = implode(' ', $argv);
+if($argument_priority) {
+    unset($argv[$argument_count - 1]);
+    $argument_imploded = implode(' ', $argv);
+}
+
+$help = <<<HELP
+Usage: todo [option] [id] [todo] [priority]
+    ?, -h, --help                Displays this help page
+    "todo", -t, --todo           Add todo item
+    "priority", -p, --priority   Displaying items with priority or add item with priority
+    d, -d, --delete              Delete an item
+
+Examples:
+    Lists all todos with with ids and priority
+    $ todo
+    
+    List all todos with priority 42
+    $ todo 42
+    
+    Creates a todo with the text "Buy milk" and sets priority to 42. Remember 
+    the priority is optional.
+    $ todo Buy milk 42
+    
+    Change item 1's priority to 21.
+    $ todo 1 21
+    
+    Deletes item 1.
+    $ todo d 1
+
+HELP;
+
+if($argument_last == '?' || isset($opt['h'])) {
+    print $help;
+    return;
+}
+
+if($argument_count == null) {
+    print Colors::green('All todos');
+    return;
+}
+
+if($argument_count == 1 && is_numeric($argument_last)) {
+    print Colors::green('Show all todo items with priority = ' . $argument_last);
+    return;
+}
+
+if($argument_count >= 1) {
+    if($argument_imploded == 'd' && is_numeric($argument_last)) {
+        print Colors::red('Deleting = ' . $argument_last);
+        return;
+    }
+
+    if(is_numeric($argument_first) && is_numeric($argument_last)) {
+        print Colors::yellow('Setting priority of ' . $argument_first . ' to ' . $argument_last);
+        return;
+    }
+
+    if($argument_priority) {
+        print Colors::green('Adding item with priority');
+        return;
+    }
+
+    print Colors::green('Adding item');
+    return;
+}
