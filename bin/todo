@@ -6,9 +6,10 @@ require 'Todo.php';
 
 $todo = new Todo();
 
-$opt = getopt('ht:p::d::', array(
+// @todo This will be added later when i find a clever way of doing so
+$opt = getopt('ha:p::d::', array(
     'help',
-    'todo:',
+    'add:',
     'priority::',
     'delete::'
 ));
@@ -26,9 +27,12 @@ if($argument_priority) {
 }
 
 $help = <<<HELP
+Note:
+    The options hasnt been implemented yet! Please use the way in the example
+
 Usage: todo [option] [id] [todo] [priority]
     ?, -h, --help                Displays this help page
-    "todo", -t, --todo           Add todo item
+    "todo", -a, --add           Add todo item
     "priority", -p, --priority   Displaying items with priority or add item with priority
     d, -d, --delete              Delete an item
 
@@ -51,37 +55,43 @@ Examples:
 
 HELP;
 
-if($argument_last == '?' || isset($opt['h'])) {
+if($argument_last == '?' || isset($opt['h']) || isset($opt['help'])) {
     print $help;
     return;
 }
 
 if($argument_count == null) {
     print Colors::green('All todos');
+    $todos = $todo->getTodos();
     return;
 }
 
 if($argument_count == 1 && is_numeric($argument_last)) {
     print Colors::green('Show all todo items with priority = ' . $argument_last);
+    $todos = $todo->getTodos((int) $argument_last);
     return;
 }
 
 if($argument_count >= 1) {
     if($argument_imploded == 'd' && is_numeric($argument_last)) {
         print Colors::red('Deleting = ' . $argument_last);
+        $todo->delete((int) $argument_last);
         return;
     }
 
     if(is_numeric($argument_first) && is_numeric($argument_last)) {
         print Colors::yellow('Setting priority of ' . $argument_first . ' to ' . $argument_last);
+        $todo = $todo->setPriority((int) $argument_last);
         return;
     }
 
     if($argument_priority) {
         print Colors::green('Adding item with priority');
+        $todo = $todo->add($argument_imploded, (int) $argument_last);
         return;
     }
 
     print Colors::green('Adding item');
+    $todo = $todo->add($argument_imploded);
     return;
 }
