@@ -4,6 +4,9 @@ Tiny todo app inspired by Gina Trapani's todo-cli, but in php. Also the
 class behind can be used in other usages if you like. The cli app also
 has a bunch of different ways of using it if you prefere it.
 
+As for now it requires the `php-colors` class but im working on removing
+this dependency.
+
 ## Help page
 
     Usage: todo [option] [id] [todo] [priority]
