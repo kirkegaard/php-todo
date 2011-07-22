@@ -49,6 +49,9 @@ class Todo
         return $this->_sort($list);
     }
 
+    /**
+     * @todo fix sorting
+     */
     protected function _sort($list = array())
     {
         return $list;
