@@ -4,7 +4,9 @@
 require 'Colors.php';
 require 'Todo.php';
 
-$todo = new Todo();
+$todo = new Todo(array(
+    'file' => '/Users/christian/.todo'
+));
 
 // @todo This will be added later when i find a clever way of doing so
 $opt = getopt('ha:p::d::', array(
@@ -81,7 +83,7 @@ if($argument_count >= 1) {
 
     if(is_numeric($argument_first) && is_numeric($argument_last)) {
         print Colors::yellow('Setting priority of ' . $argument_first . ' to ' . $argument_last);
-        $todo = $todo->setPriority((int) $argument_last);
+        $todo = $todo->setPriority($argument_first, (int) $argument_last);
         return;
     }
 
