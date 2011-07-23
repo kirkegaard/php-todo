@@ -63,13 +63,17 @@ if($argument_last == '?' || isset($opt['h']) || isset($opt['help'])) {
 }
 
 if($argument_count == null) {
-    print Colors::green('All todos');
     $todos = $todo->getTodos();
+    foreach($todos as $id => $todo) {
+        print Colors::green($id . " [" . $todo['priority'] . "] " . $todo['todo'] . "\n");
+    }
     return;
 }
 
 if($argument_count == 1 && is_numeric($argument_last)) {
-    print Colors::green('Show all todo items with priority = ' . $argument_last);
+    foreach($todos as $id => $todo) {
+        print Colors::green($id . " [" . $todo['priority'] . "] " . $todo['todo'] . "\n");
+    }
     $todos = $todo->getTodos((int) $argument_last);
     return;
 }
