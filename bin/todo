@@ -89,24 +89,33 @@ if($argument_count == 1 && is_numeric($argument_last)) {
 if($argument_count >= 1) {
     if($argument_imploded == 'd' && is_numeric($argument_last)) {
         $item = $todo->getOne($argument_last);
+        if(!$item) {
+            print Colors::red("Couldn't find todo\n");
+            return;
+        }
         print Colors::red("Deleting: " . $argument_last . " [" . $item['priority'] . "] " . $item['todo'] . "\n");
         $todo->delete((int) $argument_last);
         return;
     }
 
     if(is_numeric($argument_first) && is_numeric($argument_last)) {
-        print Colors::yellow('Setting priority of ' . $argument_first . ' to ' . $argument_last);
-        $todo = $todo->setPriority($argument_first, (int) $argument_last);
+        $item = $todo->getOne($argument_first);
+        if(!$item) {
+            print Colors::red("Couldn't find todo\n");
+            return;
+        }
+        print Colors::yellow("Setting priority of '" . $item['todo'] . "' to " . $argument_last . "\n");
+        $todo->setPriority($argument_first, (int) $argument_last);
         return;
     }
 
     if($argument_priority) {
         print Colors::green("Added\n");
-        $todo = $todo->add($argument_imploded, (int) $argument_last);
+        $todo->add($argument_imploded, (int) $argument_last);
         return;
     }
 
     print Colors::green("Added\n");
-    $todo = $todo->add($argument_imploded);
+    $todo->add($argument_imploded);
     return;
 }
