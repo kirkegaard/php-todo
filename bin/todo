@@ -63,24 +63,33 @@ if($argument_last == '?' || isset($opt['h']) || isset($opt['help'])) {
 }
 
 if($argument_count == null) {
-    $todos = $todo->getTodos();
-    foreach($todos as $id => $todo) {
-        print Colors::green($id . " [" . $todo['priority'] . "] " . $todo['todo'] . "\n");
+    $todos = $todo->get();
+    if(count($todos) <= 0) {
+        print Colors::green("No todos found\n");
+        return;
+    }
+    foreach($todos as $id => $item) {
+        print Colors::green($id . " [" . $item['priority'] . "] " . $item['todo'] . "\n");
     }
     return;
 }
 
 if($argument_count == 1 && is_numeric($argument_last)) {
-    foreach($todos as $id => $todo) {
-        print Colors::green($id . " [" . $todo['priority'] . "] " . $todo['todo'] . "\n");
+    $todos = $todo->get((int) $argument_last);
+    if(count($todos) <= 0) {
+        print Colors::green("No todos found\n");
+        return;
     }
-    $todos = $todo->getTodos((int) $argument_last);
+    foreach($todos as $id => $item) {
+        print Colors::green($id . " [" . $item['priority'] . "] " . $item['todo'] . "\n");
+    }
     return;
 }
 
 if($argument_count >= 1) {
     if($argument_imploded == 'd' && is_numeric($argument_last)) {
-        print Colors::red('Deleting = ' . $argument_last);
+        $item = $todo->getOne($argument_last);
+        print Colors::red("Deleting: " . $argument_last . " [" . $item['priority'] . "] " . $item['todo'] . "\n");
         $todo->delete((int) $argument_last);
         return;
     }
@@ -92,12 +101,12 @@ if($argument_count >= 1) {
     }
 
     if($argument_priority) {
-        print Colors::green('Adding item with priority');
+        print Colors::green("Added\n");
         $todo = $todo->add($argument_imploded, (int) $argument_last);
         return;
     }
 
-    print Colors::green('Adding item');
+    print Colors::green("Added\n");
     $todo = $todo->add($argument_imploded);
     return;
 }

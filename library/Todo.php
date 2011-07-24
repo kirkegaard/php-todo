@@ -38,22 +38,29 @@ class Todo
         return $this->save();
     }
 
-    public function getTodos($item = null)
+    public function get($priority = null)
     {
-        if(isset($item)) {
-            $list = $this->_todos[$item];
-        } else {
-            $list = $this->_todos;
-        }
-
-        return $this->_sort($list);
+        return $this->_todos;
     }
 
-    /**
-     * @todo fix sorting
-     */
+    public function getOne($id)
+    {
+        if(isset($this->_todos[$id])) {
+            return $this->_todos[$id];
+        }
+        return false;
+    }
+
     protected function _sort($list = array())
     {
+        if(count($list) <= 0) {
+            return array();
+        }
+        foreach($list as $key => $item) {
+            $todo[$key]     = $item['todo'];
+            $priority[$key] = $item['priority'];
+        }
+        array_multisort($priority, SORT_DESC, $list);
         return $list;
     }
 
@@ -66,6 +73,7 @@ class Todo
 
     public function save()
     {
+        $this->_todos = $this->_sort($this->_todos);
         file_put_contents($this->_options['file'], serialize($this->_todos));
         return $this;
     }
