@@ -16,6 +16,13 @@ $opt = getopt('ha:p::d::', array(
     'delete::'
 ));
 
+$priority_colors = array(
+    'low'  => 'green',
+    'mid'  => 'yellow',
+    'high' => 'red',
+    'important' => 'black'
+);
+
 $argv = array_slice($argv, 1);
 
 $argument_count    = count($argv);
@@ -69,7 +76,20 @@ if($argument_count == null) {
         return;
     }
     foreach($todos as $id => $item) {
-        print Colors::green($id . " [" . $item['priority'] . "] " . $item['todo'] . "\n");
+        $ip = $item['priority'];
+        $color = $priority_colors['low'];
+
+        if($ip >= 50) {
+            $color = $priority_colors['mid'];
+        }
+        if($ip >= 100) {
+            $color = $priority_colors['high'];
+        }
+        if($ip >= 150) {
+            $color = $priority_colors['important'];
+        }
+
+        print Colors::$color($id . " [" . $ip . "] " . $item['todo'] . "\n", ($ip >= 150) ? 'yellow' : null);
     }
     return;
 }
