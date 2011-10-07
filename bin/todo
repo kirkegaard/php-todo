@@ -101,7 +101,9 @@ if($argument_count == 1 && is_numeric($argument_last)) {
         return;
     }
     foreach($todos as $id => $item) {
-        print Colors::green($id . " [" . $item['priority'] . "] " . $item['todo'] . "\n");
+        if($item['priority'] == $argument_last) {
+            print Colors::green($id . " [" . $item['priority'] . "] " . $item['todo'] . "\n");
+        }
     }
     return;
 }
